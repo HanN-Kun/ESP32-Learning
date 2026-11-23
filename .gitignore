@@ -1,0 +1,13 @@
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+.vscode/
+.cache/
+.clangd/
+compile_commands.json
+.pio/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
