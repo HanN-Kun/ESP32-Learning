@@ -1,1 +1,65 @@
 # ESP32-Learning
+
+A hands-on learning log for the **ESP32**, built one small project at a time.
+
+The goal is to get comfortable with the board itself and every peripheral it has, starting from simple GPIO and working up to more advanced features. Wi-Fi and Bluetooth are intentionally left for the end, so the fundamentals come first and the wireless projects can be done properly later.
+
+## Hardware
+
+- **Board:** ESP32 DevKit V1 (ESP-WROOM-32, 30 pins)
+- **Framework:** ESP-IDF, developed in VS Code with the Espressif ESP-IDF extension
+- **Language:** C
+- **Parts used so far:** LEDs, 1 kΩ resistors, breadboard, jumper wires, and the on-board BOOT button
+
+## Roadmap
+
+| Level | Topic | Status |
+|---|---|---|
+| 1 | GPIO and tasks | Done |
+| 2 | Timers and PWM | Next |
+| 3 | Analog input/output (ADC, DAC, touch) | Planned |
+| 4 | Communication (UART, I2C, SPI) | Planned |
+| 5 | ESP32-specific features (dual core, flash storage, deep sleep, pulse counter) | Planned |
+| 6 | Combined projects | Planned |
+| Final | Wi-Fi and Bluetooth projects | Planned |
+
+## Level 1: GPIO and tasks
+
+Folder: [`Level-1_GPIO`](Level-1_GPIO)
+
+| Project | What it does | Concepts |
+|---|---|---|
+| [`Led_ControllWith_Button`](Level-1_GPIO/Led_ControllWith_Button) | An LED follows the button, then toggles on each press | GPIO input and output, pull-up, debounce |
+| [`Led_Control_with_Interrupt`](Level-1_GPIO/Led_Control_with_Interrupt) | The same toggle, but the button wakes the code through an interrupt instead of being polled | Interrupts, FreeRTOS queue, task |
+| [`Two_Leds_Two_Tasks`](Level-1_GPIO/Two_Leds_Two_Tasks) | Two LEDs blink at different speeds, each driven by its own task | FreeRTOS tasks, delays |
+
+### Wiring used in Level 1
+
+| Part | ESP32 pin | Notes |
+|---|---|---|
+| LED 1 | GPIO26 | Through a 1 kΩ resistor to GND |
+| LED 2 | GPIO27 | Through a 1 kΩ resistor to GND |
+| Button | GPIO0 | The on-board BOOT button, active low |
+
+The BOOT button shares its pin with a boot-mode pin, so avoid holding it while the board powers up or resets. Once the program is running it behaves like any other input.
+
+## How to build and flash a project
+
+1. Install VS Code and the **Espressif IDF** extension, then let it set up ESP-IDF.
+2. Open **one project folder** (for example `Level-1_GPIO/Two_Leds_Two_Tasks`) in VS Code, not the parent folder. The extension looks for `CMakeLists.txt` in the folder you open.
+3. Set the target to `esp32` and select the board's serial port.
+4. Use the build, flash and monitor buttons in the bottom bar. The flame button does all three at once.
+
+## Repository layout
+
+```
+ESP32-Learning/
+├── README.md
+├── .gitignore
+└── Level-1_GPIO/
+    ├── Led_ControllWith_Button/
+    ├── Led_Control_with_Interrupt/
+    └── Two_Leds_Two_Tasks/
+```
+
+Build output, local editor settings and generated configuration files are excluded through `.gitignore`.
