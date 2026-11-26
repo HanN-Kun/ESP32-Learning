@@ -9,14 +9,14 @@ The goal is to get comfortable with the board itself and every peripheral it has
 - **Board:** ESP32 DevKit V1 (ESP-WROOM-32, 30 pins)
 - **Framework:** ESP-IDF, developed in VS Code with the Espressif ESP-IDF extension
 - **Language:** C
-- **Parts used so far:** LEDs, 1 kΩ resistors, breadboard, jumper wires, and the on-board BOOT button
+- **Parts used so far:** LEDs, 330 Ω / 1 kΩ resistors, breadboard, jumper wires, MG90S servo, 1000 µF capacitor, and the on-board BOOT button
 
 ## Roadmap
 
 | Level | Topic | Status |
 |---|---|---|
 | 1 | GPIO and tasks | Done |
-| 2 | Timers and PWM | Next |
+| 2 | Timers and PWM | In progress |
 | 3 | Analog input/output (ADC, DAC, touch) | Planned |
 | 4 | Communication (UART, I2C, SPI) | Planned |
 | 5 | ESP32-specific features (dual core, flash storage, deep sleep, pulse counter) | Planned |
@@ -43,6 +43,30 @@ Folder: [`Level-1_GPIO`](Level-1_GPIO)
 
 The BOOT button shares its pin with a boot-mode pin, so avoid holding it while the board powers up or resets. Once the program is running it behaves like any other input.
 
+## Level 2: Timers and PWM
+
+Folder: [`Level-2_Timer_PWM`](Level-2_Timer_PWM)
+
+| Project | What it does | Concepts |
+|---|---|---|
+| [`Hardware_Timer_Led`](Level-2_Timer_PWM/Hardware_Timer_Led) | A hardware timer toggles an LED every 500 ms | GPTimer, alarm callback, auto-reload |
+| [`PWM_Led_Fade`](Level-2_Timer_PWM/PWM_Led_Fade) | An LED smoothly fades in and out | LEDC, 5 kHz PWM, 10-bit duty cycle |
+| [`Servo_Sweep`](Level-2_Timer_PWM/Servo_Sweep) | Drives a servo back and forth with 1000–2000 µs pulses | LEDC, 50 Hz PWM, 14-bit resolution, pulse width control |
+
+Next up: a buzzer melody.
+
+### Wiring used in Level 2
+
+| Part | ESP32 pin | Notes |
+|---|---|---|
+| LED | GPIO26 | Through a 330 Ω or 1 kΩ resistor to GND (timer and fade projects) |
+| Servo signal (orange) | GPIO13 | PWM output |
+| Servo power (red) | VIN | 5 V from USB; only for a single unloaded servo |
+| Servo ground (brown) | GND | |
+| 1000 µF capacitor | VIN and GND | Across the servo supply; mind the polarity |
+
+For a loaded servo, use an external 5 V supply and connect its ground to the ESP32 ground.
+
 ## How to build and flash a project
 
 1. Install VS Code and the **Espressif IDF** extension, then let it set up ESP-IDF.
@@ -56,10 +80,14 @@ The BOOT button shares its pin with a boot-mode pin, so avoid holding it while t
 ESP32-Learning/
 ├── README.md
 ├── .gitignore
-└── Level-1_GPIO/
-    ├── Led_ControllWith_Button/
-    ├── Led_Control_with_Interrupt/
-    └── Two_Leds_Two_Tasks/
+├── Level-1_GPIO/
+│   ├── Led_ControllWith_Button/
+│   ├── Led_Control_with_Interrupt/
+│   └── Two_Leds_Two_Tasks/
+└── Level-2_Timer_PWM/
+    ├── Hardware_Timer_Led/
+    ├── PWM_Led_Fade/
+    └── Servo_Sweep/
 ```
 
 Build output, local editor settings and generated configuration files are excluded through `.gitignore`.
